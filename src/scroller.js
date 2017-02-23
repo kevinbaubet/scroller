@@ -1,7 +1,7 @@
 /**
  * Scroller
  *
- * @version 2.0 (12/01/2017)
+ * @version 2.1 (23/02/2017)
  */
 (function($) {
     'use strict';
@@ -110,7 +110,7 @@
         requestAnimationFramePolyfill: function() {
             var lastTime = 0;
             var vendorIndex = 0;
-            var vendors = ['ms', 'moz', 'webkit'];
+            var vendors = ['o', 'ms', 'moz', 'webkit'];
 
             for (vendorIndex = 0; vendorIndex < vendors.length && !window.requestAnimationFrame; ++vendorIndex) {
                 window.requestAnimationFrame = window[vendors[vendorIndex] + 'RequestAnimationFrame'];
@@ -144,8 +144,8 @@
          * @param string type Type d'offet current,previous
          */
         setOffset: function(type) {
-            this.offset[type].x = window.pageXOffset;
-            this.offset[type].y = window.pageYOffset;
+            this.offset[type].x = parseInt(window.pageXOffset);
+            this.offset[type].y = parseInt(window.pageYOffset);
         },
 
         /**
@@ -165,13 +165,13 @@
             var self = this;
 
             // Valeur par défaut
-            self.container.width = window.innerWidth;
-            self.container.height = window.innerHeight;
+            self.container.width = parseInt(window.innerWidth);
+            self.container.height = parseInt(window.innerHeight);
 
             // Au resize
             $(window).on('resize.scroller orientationchange.scroller', function() {
-                self.container.width = window.innerWidth;
-                self.container.height = window.innerHeight;
+                self.container.width = parseInt(window.innerWidth);
+                self.container.height = parseInt(window.innerHeight);
             });
         },
 
@@ -210,7 +210,7 @@
                             Scroller: self,
                             event: event,
                             window: window,
-                            containerDimensions: self.geContainerDimensions(),
+                            containerDimensions: self.getContainerDimensions(),
                             offset: self.getOffset(),
                             direction: self.getScrollDirection()
                         });
