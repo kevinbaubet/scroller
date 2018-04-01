@@ -1,12 +1,7 @@
-/**
- * Scroller
- *
- * @version 2.1 (23/02/2017)
- */
-(function($) {
+(function ($) {
     'use strict';
 
-    $.Scroller = function(options) {
+    $.Scroller = function (options) {
         // Config
         $.extend(true, (this.settings = {}), $.Scroller.defaults, options);
 
@@ -31,10 +26,10 @@
 
         // Init
         if (this.prepareOptions()) {
-            this.init();
+            return this.init();
         }
 
-        return this;
+        return false;
     };
 
     $.Scroller.defaults = {
@@ -62,11 +57,11 @@
          *
          * @return bool
          */
-        prepareOptions: function() {
+        prepareOptions: function () {
             var self = this;
 
             // Classes
-            $.each(self.settings.classes, function(key, value) {
+            $.each(self.settings.classes, function (key, value) {
                 if (typeof value === 'string') {
                     self.settings.classes[key] = value.replace(/{prefix}/, self.settings.classes.prefix);
                 }
@@ -80,7 +75,7 @@
          *
          * @param object options Options utilisateur
          */
-        setOptions: function(options) {
+        setOptions: function (options) {
             $.extend(true, this.settings, options);
 
             return this;
@@ -89,7 +84,7 @@
         /**
          * Initialisation
          */
-        init: function() {
+        init: function () {
             this.requestAnimationFramePolyfill();
 
             if (this.settings.containerDimensions) {
@@ -99,15 +94,17 @@
             // User callback
             if (this.settings.onComplete !== undefined) {
                 this.settings.onComplete.call({
-                    Scroller: this
+                    scroller: this
                 });
             }
+
+            return this;
         },
 
         /**
          * Polyfill requestAnimationFrame
          */
-        requestAnimationFramePolyfill: function() {
+        requestAnimationFramePolyfill: function () {
             var lastTime = 0;
             var vendorIndex = 0;
             var vendors = ['o', 'ms', 'moz', 'webkit'];
@@ -118,10 +115,10 @@
             }
 
             if (!window.requestAnimationFrame) {
-                window.requestAnimationFrame = function(callback) {
+                window.requestAnimationFrame = function (callback) {
                     var currTime = new Date().getTime();
                     var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-                    var id = window.setTimeout(function() {
+                    var id = window.setTimeout(function () {
                         callback(currTime + timeToCall);
                     }, timeToCall);
 
@@ -132,7 +129,7 @@
             }
 
             if (!window.cancelAnimationFrame) {
-                window.cancelAnimationFrame = function(id) {
+                window.cancelAnimationFrame = function (id) {
                     clearTimeout(id);
                 };
             }
@@ -143,9 +140,11 @@
          *
          * @param string type Type d'offet current,previous
          */
-        setOffset: function(type) {
+        setOffset: function (type) {
             this.offset[type].x = parseInt(window.pageXOffset);
             this.offset[type].y = parseInt(window.pageYOffset);
+
+            return this;
         },
 
         /**
@@ -154,14 +153,14 @@
          * @param string type Type d'offet current,previous
          * @return object offset x,y
          */
-        getOffset: function(type) {
+        getOffset: function (type) {
             return (this.offset[type] !== undefined) ? this.offset[type] : this.offset;
         },
 
         /**
          * Met à jour les dimensions du conteneur
          */
-        setContainerDimensions: function() {
+        setContainerDimensions: function () {
             var self = this;
 
             // Valeur par défaut
@@ -169,10 +168,12 @@
             self.container.height = parseInt(window.innerHeight);
 
             // Au resize
-            $(window).on('resize.scroller orientationchange.scroller', function() {
+            $(window).on('resize.scroller orientationchange.scroller', function () {
                 self.container.width = parseInt(window.innerWidth);
                 self.container.height = parseInt(window.innerHeight);
             });
+
+            return self;
         },
 
         /**
@@ -180,7 +181,7 @@
          *
          * @return object container width,height
          */
-        getContainerDimensions: function() {
+        getContainerDimensions: function () {
             return this.container;
         },
 
@@ -189,13 +190,13 @@
          *
          * @param  function callback Callback à executer lors du scroll
          */
-        onScroll: function(callback) {
+        onScroll: function (callback) {
             var self = this;
 
-            $(window).on('scroll.scroller', function(event) {
+            $(window).on('scroll.scroller', function (event) {
                 clearTimeout(self.timeout);
 
-                self.timeout = setTimeout(function() {
+                self.timeout = setTimeout(function () {
                     // Mise à jour de l'offset
                     self.setOffset('current');
 
@@ -207,7 +208,7 @@
                     // Callback
                     if (callback !== undefined) {
                         callback.call({
-                            Scroller: self,
+                            scroller: self,
                             event: event,
                             window: window,
                             containerDimensions: self.getContainerDimensions(),
@@ -230,7 +231,7 @@
          *
          * @return string
          */
-        getScrollDirection: function() {
+        getScrollDirection: function () {
             if (this.settings.axis === 'x') {
                 if (this.offset.previous.x > this.offset.current.x) {
                     this.direction = 'left';
@@ -253,7 +254,7 @@
          *
          * @param  object options Options utilisateur
          */
-        displayElements: function(options) {
+        displayElements: function (options) {
             var self = this;
 
             // Changement des options
@@ -274,8 +275,8 @@
 
             // Pour chaque élément, on récupère sa position
             if (self.settings.displayElements.element.length) {
-                self.settings.displayElements.element.each(function() {
-                    var element = $(this);
+                self.settings.displayElements.element.each(function (i, element) {
+                    element = $(element);
                     var offset = element.offset();
 
                     // Par défaut, on masque l'élément
@@ -311,7 +312,7 @@
          *
          * @return bool
          */
-        hasDisplayElements: function() {
+        hasDisplayElements: function () {
             return (this.toDisplay.length);
         },
 
@@ -320,7 +321,7 @@
          *
          * @return object x,y
          */
-        getDisplayLimit: function() {
+        getDisplayLimit: function () {
             var limit = {
                 x: 0,
                 y: 0
@@ -339,19 +340,19 @@
         /**
          * Gestion de l'affichage au scroll
          */
-        displayElementsOnScroll: function() {
+        displayElementsOnScroll: function () {
             var self = this;
             var limit = self.getDisplayLimit();
 
             // Pour chaque élément à afficher, on test si c'est le moment
-            $.each(self.toDisplay, function(i, toDisplay) {
+            $.each(self.toDisplay, function (i, toDisplay) {
                 if ((self.settings.axis === 'y' && limit.y >= toDisplay.offset.top) || (self.settings.axis === 'x' && limit.x >= toDisplay.offset.left)) {
                     toDisplay.element.removeClass(self.settings.classes.hidden);
 
                     // User callback
                     if (self.settings.displayElements.onShow !== undefined) {
                         self.settings.displayElements.onShow.call({
-                            Scroller: self,
+                            scroller: self,
                             toDisplay: toDisplay,
                             displayLimit: limit
                         });
@@ -364,13 +365,15 @@
                     // User callback
                     if (self.settings.displayElements.onHide !== undefined) {
                         self.settings.displayElements.onHide.call({
-                            Scroller: self,
+                            scroller: self,
                             toDisplay: toDisplay,
                             displayLimit: limit
                         });
                     }
                 }
             });
+
+            return self;
         }
     };
 })(jQuery);

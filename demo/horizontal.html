@@ -4,20 +4,20 @@
         <meta charset="UTF-8" />
         <title>Scroller</title>
         <link rel="stylesheet" href="demo.css" />
-        
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+        <script src="../node_modules/jquery/dist/jquery.min.js"></script>
         
         <script src="../src/scroller.js"></script>
         <script>
-            jQuery(document).ready(function($) {
+            jQuery(document).ready(function ($) {
                 // Init
-                var Scroller = new $.Scroller({
+                var scroller = new $.Scroller({
                     axis: 'x'
                 });
 
                 // Activation du scroll + affichage des éléments
-                Scroller.onScroll().displayElements({
-                    percent: 75,
+                scroller.onScroll().displayElements({
+                    percent: 70,
                     hide: true
                 });
             });
