@@ -197,6 +197,11 @@
                 clearTimeout(self.timeout);
 
                 self.timeout = setTimeout(function () {
+                    // Transmission de l'objet Scroller
+                    event.data = {
+                        self: self
+                    };
+
                     // Mise à jour de l'offset
                     self.setOffset('current');
 

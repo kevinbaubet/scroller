@@ -1,8 +1,8 @@
 {
   "name": "scroller",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "main": "./dist/scroller.min.js",
-  "repository": "https://github.com/keverage/scroller.git",
+  "repository": "https://github.com/kevinbaubet/scroller.git",
   "author": "Kévin Baubet <contact@kevinbaubet.fr>",
   "license": "MIT",
   "dependencies": {
@@ -11,7 +11,7 @@
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-load-plugins": "^1.5.0",
-    "gulp-uglify": "^3.0.0",
-    "gulp-rename": "^1.2.2"
+    "gulp-uglify": "^3.0.1",
+    "gulp-rename": "^1.4.0"
   }
 }
