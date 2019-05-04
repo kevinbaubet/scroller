@@ -1,8 +1,11 @@
 {
-  "name": "scroller",
+  "name": "@kevinbaubet/scroller",
   "version": "2.1.1",
   "main": "./dist/scroller.min.js",
-  "repository": "https://github.com/kevinbaubet/scroller.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kevinbaubet/scroller.git"
+  },
   "author": "Kévin Baubet <contact@kevinbaubet.fr>",
   "license": "MIT",
   "dependencies": {
