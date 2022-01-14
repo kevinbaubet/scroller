@@ -11,10 +11,13 @@
         <script>
             jQuery(document).ready(function ($) {
                 // Init
-                var scroller = new $.Scroller();
+                let scroller = new $.Scroller();
 
-                // Activation du scroll + affichage des éléments
-                scroller.onScroll().displayElements({
+                // Scroll actions
+                scroller.onScroll();
+
+                // Display elements actions
+                scroller.displayElements({
                     hide: true
                 });
             });
@@ -31,25 +34,25 @@
                 </ul>
             </nav>
 
-            <div class="element l-even scroller-toDisplay">
+            <div class="element l-even scroller-to-display">
                 <img src="images/1.jpg" alt="" />
             </div>
-            <div class="element l-odd scroller-toDisplay">
+            <div class="element l-odd scroller-to-display">
                 <img src="images/2.jpg" alt="" />
             </div>
-            <div class="element l-even scroller-toDisplay">
+            <div class="element l-even scroller-to-display">
                 <img src="images/3.jpg" alt="" />
             </div>
-            <div class="element l-odd scroller-toDisplay">
+            <div class="element l-odd scroller-to-display">
                 <img src="images/4.jpg" alt="" />
             </div>
-            <div class="element l-even scroller-toDisplay">
+            <div class="element l-even scroller-to-display">
                 <img src="images/5.jpg" alt="" />
             </div>
-            <div class="element l-odd scroller-toDisplay">
+            <div class="element l-odd scroller-to-display">
                 <img src="images/6.jpg" alt="" />
             </div>
-            <div class="element l-even scroller-toDisplay">
+            <div class="element l-even scroller-to-display">
                 <img src="images/7.jpg" alt="" />
             </div>
         </div>
