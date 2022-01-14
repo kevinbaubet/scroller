@@ -16,4 +16,4 @@ function minify(pumpCallback) {
 }
 
 // Alias
-exports.prod = plugins.gulp.parallel(minify);
+exports.prod = minify;
