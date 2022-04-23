@@ -4,10 +4,11 @@
     /**
      * Scroller
      *
-     * @return {boolean}
+     * @param options
+     * @return {jQuery.Scroller}
      */
     $.Scroller = function (options) {
-        // Config
+        // Options
         $.extend(true, (this.settings = {}), $.Scroller.defaults, options);
 
         // Variables
@@ -30,13 +31,18 @@
         this.direction = null;
 
         // Init
-        if (this.prepareOptions()) {
-            return this.init();
+        if (this.prepareUserOptions()) {
+            this.init();
         }
 
-        return false;
+        return this;
     };
 
+    /**
+     * Default options
+     *
+     * @type {{classes: {hidden: string, toDisplay: string, prefix: string}, onComplete: undefined, containerDimensions: boolean, axis: string, displayElements: {hide: boolean, onShow: undefined, onHide: undefined, percent: number, element: undefined}, timeout: number}}
+     */
     $.Scroller.defaults = {
         axis: 'y',
         containerDimensions: false,
@@ -56,13 +62,18 @@
         onComplete: undefined
     };
 
+    /**
+     * Methods
+     *
+     * @type {{init: (function(): $.Scroller), hasDisplayElements: (function(): boolean), setContainerDimensions: (function(): $.Scroller), getOffset: (function(string=): *), getDisplayLimit: (function(): {x: number, y: number}), updateOffset: (function(string): $.Scroller), displayElementsOnScroll: (function(): $.Scroller), requestAnimationFramePolyfill: $.Scroller.requestAnimationFramePolyfill, onScroll: (function(Function): $.Scroller), setOptions: (function(Object): $.Scroller), getContainerDimensions: (function(): *), getScrollDirection: (function(): string|*), displayElements: (function(Object): $.Scroller), prepareOptions: (function(): boolean)}}
+     */
     $.Scroller.prototype = {
         /**
          * Prepare user options
          *
          * @return {boolean}
          */
-        prepareOptions: function () {
+        prepareUserOptions: function () {
             let self = this;
 
             // Classes
@@ -141,19 +152,19 @@
         },
 
         /**
-         * Update specific offset
+         * Update the specified offset
          *
          * @param {string} type Offset type: current, previous
          */
         updateOffset: function (type) {
-            this.offset[type].x = parseInt(window.pageXOffset);
-            this.offset[type].y = parseInt(window.pageYOffset);
+            this.offset[type].x = parseInt(window.scrollX);
+            this.offset[type].y = parseInt(window.scrollY);
 
             return this;
         },
 
         /**
-         * Get specific offset
+         * Get the specified offset
          *
          * @param {string=undefined} type Offset type: current, previous
          * @return {object} offset x,y
@@ -279,7 +290,7 @@
                     self.settings.displayElements.element = $('.' + self.settings.classes.toDisplay);
                 }
 
-                // For every element => get position
+                // For each element => get position
                 if (self.settings.displayElements.element.length) {
                     self.settings.displayElements.element.each(function (i, element) {
                         element = $(element);
@@ -287,7 +298,7 @@
                         let customOffsetAttr = element.attr('data-scroller-offset');
                         let customOffset = customOffsetAttr !== undefined ? parseInt(customOffsetAttr) : 0;
 
-                        // Per default, the element is hidden
+                        // By default, the element is hidden
                         element.addClass(self.settings.classes.hidden);
 
                         // Get positions
@@ -308,7 +319,7 @@
                     });
                 }
 
-                // On load, display elements in current viewport
+                // On load, display elements in the current viewport
                 self.displayElementsOnScroll();
             });
 
@@ -316,7 +327,7 @@
         },
 
         /**
-         * Determines if there are elements to display
+         * Return true if there are elements to display
          *
          * @return {boolean}
          */
@@ -325,7 +336,7 @@
         },
 
         /**
-         * Récupération de la limite d'affichage du conteneur en fonction du scroll
+         * Return a line in the viewport to display elements
          *
          * @return {object} x,y
          */
@@ -335,7 +346,6 @@
                 y: 0
             };
 
-            // Calcul de la ligne d'affichage par rapport au conteneur, un pourcentage d'affichage et l'axe
             if (this.settings.axis === 'x') {
                 limit.x = this.offset.current.x + (this.container.width * this.settings.displayElements.percent / 100);
             } else {
